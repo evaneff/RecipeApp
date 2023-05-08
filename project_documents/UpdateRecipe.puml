@@ -1,0 +1,69 @@
+@startuml
+title Update Recipe
+
+actor Client
+participant "API Gateway" as APIGateway
+participant Lambda
+participant UpdateRecipe
+participant RecipeDao
+participant ServiceUtils
+participant ModelConverter
+database DynamoDB
+
+
+Client -> APIGateway: HTTP Request
+activate Client
+APIGateway --> Lambda : Put /Recipe /name
+activate Lambda
+
+Lambda -> UpdateRecipe : UpdateRecipeRequest
+activate UpdateRecipe
+
+UpdateRecipe -> ServiceUtils : isValidString(name)
+
+alt if name invalid
+    UpdateRecipe <-- ServiceUtils : false
+    Lambda <-- UpdateRecipe : throw InvalidAttributeValueException
+    APIGateway <-- Lambda
+    Client <-- APIGateway : 400 Response
+else otherwise, continue
+end
+
+UpdateRecipe -> RecipeDao : getRecipe(name)
+activate RecipeDao
+
+RecipeDao -> DynamoDB : load recipe
+
+alt if recipe name does not exist
+    RecipeDao <-- DynamoDB : null
+    Lambda <-- RecipeDao : throw RecipeNotFoundException
+    APIGateway <-- Lambda
+    Client <-- APIGateway : 400 Response
+else otherwise, continue
+end
+
+RecipeDao <-- DynamoDB : Recipe
+UpdateRecipe <-- RecipeDao : Recipe
+UpdateRecipe -> UpdateRecipe : update Recipe
+UpdateRecipe -> RecipeDao : saveRecipe(Recipe)
+RecipeDao -> DynamoDB : saveRecipe
+
+RecipeDao <-- DynamoDB : Recipe
+UpdateRecipe <-- RecipeDao : Recipe
+deactivate RecipeDao
+UpdateRecipe -> ModelConverter : toRecipeModel(Recipe)
+activate ModelConverter
+UpdateRecipe <-- ModelConverter : RecipeModel
+
+deactivate ModelConverter
+
+
+Lambda <-- UpdateRecipe : UpdateRecipeResult
+deactivate UpdateRecipe
+APIGateway <-- Lambda
+
+
+deactivate Lambda
+Client <-- APIGateway : 200 Response
+deactivate Client
+@enduml

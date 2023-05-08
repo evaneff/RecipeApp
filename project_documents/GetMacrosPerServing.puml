@@ -1,0 +1,51 @@
+@startuml
+title Get Macros Per Serving
+
+actor Client
+participant "API Gateway" as APIGateway
+participant Lambda
+participant GetMacrosPerServing
+participant RecipeDao
+participant ModelConverter
+database DynamoDB
+
+
+Client -> APIGateway : HTTP Request
+activate Client
+APIGateway --> Lambda : GET /Recipe /requestedName
+activate Lambda
+activate GetMacrosPerServing
+activate RecipeDao
+Lambda -> GetMacrosPerServing: GetMacrosPerServingRequest
+GetMacrosPerServing -> RecipeDao : getMacrosPerServing(name)
+RecipeDao -> DynamoDB : load recipe by name
+alt if recipe name does not exist
+    RecipeDao <-- DynamoDB : null
+    Lambda <-- RecipeDao : throw RecipeNotFoundException
+    APIGateway <-- Lambda
+    Client <-- APIGateway : 404 Response
+else otherwise, continue
+end
+
+RecipeDao <-- DynamoDB : Recipe
+GetMacrosPerServing <-- RecipeDao : Recipe
+GetMacrosPerServing -> GetMacrosPerServing : Populate Recipe object
+GetMacrosPerServing -> GetMacrosPerServing : Loop through Macronutrients
+GetMacrosPerServing -> GetMacrosPerServing : calculate calories, macros, divide by servings
+
+GetMacrosPerServing -> ModelConverter : MacronutrientModel(Macronutrient)
+activate ModelConverter
+GetMacrosPerServing <-- ModelConverter : MacronutrientModel
+
+deactivate ModelConverter
+
+
+Lambda <-- GetMacrosPerServing : GetMacrosPerServingResult
+APIGateway <-- Lambda
+deactivate RecipeDao
+deactivate GetMacrosPerServing
+deactivate Lambda
+Client <-- APIGateway : 200 Response
+deactivate Client
+
+@enduml

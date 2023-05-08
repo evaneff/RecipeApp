@@ -1,0 +1,51 @@
+@startuml
+title Create Recipe
+
+actor Client
+participant "API Gateway" as APIGateway
+participant Lambda
+participant CreateRecipe
+participant RecipeDao
+participant ServiceUtils
+participant ModelConverter
+database DynamoDB
+
+
+Client -> APIGateway : HTTP Request
+activate Client
+APIGateway --> Lambda : POST /Recipe
+activate Lambda
+Lambda -> CreateRecipe: CreateRecipeRequest
+activate CreateRecipe
+
+CreateRecipe -> ServiceUtils : isValidString(name)
+
+alt if name invalid
+    CreateRecipe <-- ServiceUtils : false
+    Lambda <-- CreateRecipe : throw InvalidAttributeValueException
+    APIGateway <-- Lambda
+    Client <-- APIGateway : 400 Response
+else otherwise, continue
+end
+
+CreateRecipe -> CreateRecipe : populate Recipe object
+
+CreateRecipe -> RecipeDao : saveRecipe
+activate RecipeDao
+
+RecipeDao -> DynamoDB : saveRecipe
+RecipeDao <-- DynamoDB : Recipe
+CreateRecipe <-- RecipeDao : Recipe
+deactivate RecipeDao
+CreateRecipe -> ModelConverter : toRecipeModel(Recipe)
+activate ModelConverter
+CreateRecipe <-- ModelConverter : RecipeModel
+deactivate ModelConverter
+Lambda <-- CreateRecipe : CreateRecipeResult
+
+deactivate CreateRecipe
+APIGateway <-- Lambda
+deactivate Lambda
+Client <-- APIGateway : 200 Response
+deactivate Client
+@enduml

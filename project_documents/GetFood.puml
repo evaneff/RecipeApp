@@ -1,0 +1,49 @@
+@startuml
+title Get Food
+
+actor Client
+participant "API Gateway" as APIGateway
+participant Lambda
+participant GetFood
+participant FoodDao
+participant ModelConverter
+database DynamoDB
+
+
+Client -> APIGateway: HTTP Request
+activate Client
+APIGateway --> Lambda : GET /Food /requestedName
+activate Lambda
+
+Lambda -> GetFood: GetFoodRequest
+activate GetFood
+GetFood -> FoodDao : getFood(requestedName)
+activate FoodDao
+FoodDao -> DynamoDB : load food by name
+alt if food name does not exist
+    FoodDao <-- DynamoDB : null
+    Lambda <-- FoodDao : throw FoodNotFoundException
+    APIGateway <-- Lambda
+    Client <-- APIGateway : 404 Response
+else otherwise, continue
+end
+
+FoodDao <-- DynamoDB : Food
+GetFood <-- FoodDao : Food
+GetFood -> GetFood : populate Food object
+deactivate FoodDao
+GetFood -> ModelConverter : toFoodModel(Food)
+activate ModelConverter
+GetFood <-- ModelConverter : FoodModel
+deactivate ModelConverter
+
+Lambda <-- GetFood : GetFoodResult
+deactivate GetFood
+APIGateway <-- Lambda
+
+
+deactivate Lambda
+Client <-- APIGateway : 200 Response
+deactivate Client
+
+@enduml

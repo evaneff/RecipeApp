@@ -1,0 +1,54 @@
+@startuml
+
+class GetRecipe
+class CreateRecipe
+class UpdateRecipe
+class RecipeDao
+class GetFood
+class CreateFood
+class GetFood
+class FoodDao
+class GetMacrosPerServing
+class GetAllRecipes
+enum MeasureType {
+teaspoon
+tablespoon
+cup
+ounce
+gram
+
+}
+class Macronutrient {
+- calories : int
+- protein : int
+- fat : int
+- carbohydrates : int
+}
+class Recipe {
+- customerId : String
+- name : String
+- servings : int
+- amounts : List<Double>
+- measureType : List<MeasureType>
+- ingredients : List<Food>
+}
+class Food {
+- customerId : String
+- food : String
+- brand : String
+- amount : double
+- measureType : MeasureType
+- macros : Macronutrient
+}
+
+GetFood ..> FoodDao
+CreateFood ..> FoodDao
+GetRecipe ..> RecipeDao
+UpdateRecipe ..> RecipeDao
+CreateRecipe ..> RecipeDao
+GetAllRecipes ..> RecipeDao
+GetMacrosPerServing ..> RecipeDao
+Recipe -- Food
+Recipe -- MeasureType
+Food -- Macronutrient
+@enduml

@@ -1,0 +1,52 @@
+@startuml
+title Create Food
+
+actor Client
+participant "API Gateway" as APIGateway
+participant Lambda
+participant CreateFood
+participant FoodDao
+participant ServiceUtils
+participant ModelConverter
+database DynamoDB
+
+Client -> APIGateway : HTTP Request
+activate Client
+APIGateway --> Lambda : POST /Food
+activate Lambda
+
+Lambda -> CreateFood: CreateFoodRequest
+activate CreateFood
+
+CreateFood -> ServiceUtils : isValidString(food)
+
+alt if name invalid
+    CreateFood <-- ServiceUtils : false
+    Lambda <-- CreateFood : throw InvalidAttributeValueException
+    APIGateway <-- Lambda
+    Client <-- APIGateway : 400 Response
+else otherwise, continue
+end
+
+CreateFood -> CreateFood : populate Food object
+
+CreateFood -> FoodDao : saveFood
+activate FoodDao
+
+FoodDao -> DynamoDB : saveFood
+FoodDao <-- DynamoDB : Food
+CreateFood <-- FoodDao : Food
+deactivate FoodDao
+
+CreateFood -> ModelConverter : toFoodModel(Food)
+activate ModelConverter
+CreateFood <-- ModelConverter : FoodModel
+deactivate ModelConverter
+Lambda <-- CreateFood : CreateFoodResult
+deactivate CreateFood
+
+APIGateway <-- Lambda
+deactivate Lambda
+Client <-- APIGateway : 200 Response
+deactivate Client
+@enduml
