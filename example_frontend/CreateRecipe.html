@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport content="width=device-width, initial-scale="1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="createrecipe.js" defer></script>
+    <title>Recipe Macro Finder</title>
+</head>
+<body>
+    <h2>Create Recipe</h2>
+    <form id="create-recipe-form">
+        <label>Recipe Name:             
+          <input type="text"  id="recipe-name" required>
+        </label>   
+        <br>
+        <label>Number of Servings:
+          <input type="text"  id="servings">
+        </label>
+          <br>
+        <div id="ingredient-div">
+          <fieldset id="fieldset1">
+            <legend>Ingredient</legend>
+              <label>Amount:              
+                <input type="text" id="amount1" required>
+              </label>  
+              <label>Measure Type:            
+                <input type="text" id="measure-type1" required>
+              </label>  
+             <label>Food:              
+                <input type="text" id="food-name1" required>
+              </label>
+                <br>
+              <label>Calories:           
+                <input type="text" id="calories1" required>
+              </label>
+              <label>Protein:
+                <input type="text" id="protein1" required>
+              </label>
+              <label>Fat:           
+                <input type="text" id="fat1" required>
+              </label>
+              <label>Carbohydrates:  
+                <input type="text" id="carbohydrates1" required>
+              </label>  
+          </fieldset>
+          <br>
+        </div> 
+      
+          <input type="submit" value="Add to My Recipes">     
+    </form>
+    
+    <button onclick="createNewIngredient()">Add More Ingredients</button>
+
+      <div>
+        <a href="index.html">Back To My Recipes</a>
+      </div>
+              
+
+
+ </body>
+</html>

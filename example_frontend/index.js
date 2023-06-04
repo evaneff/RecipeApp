@@ -1,49 +1,91 @@
-const playlistForm = document.querySelector("#create-playlist-form");
-const playlistsList = document.querySelector("#playlists");
+const customerId = "evamneff";
+const myRecipes = document.querySelector("#recipes");
 
-playlistForm.onsubmit = async function(evt) {
-  evt.preventDefault();
-  const name = document.querySelector("#playlist-name").value;
-  const customerId = "testCustomer";
-  const playlistObj = {
-    "name": name,
-    "customerId": customerId,
-    "songCount": 0
+window.onload = async function getAllRecipes(evt) {
+evt.preventDefault();
+  
+  var requestHeaders = {
+    "Content-Type":"application/json",
+    "Accept":"*/*",
+    "Connection":"keep-alive",
+    "Access-Control-Allow-Origin":"*"
   }
-  axios.post("https://svebsuap66.execute-api.us-west-2.amazonaws.com/prod/playlists", playlistObj, {
-    authorization: {
-      'x-api-key': 'K7CHRL6aqt1C6eGJ9EHyFaZCn86G0fyI2sTZKSkW'
-    }
-  }).then((res) => {
-    console.log(res);
-    window.location.reload();
+  
+  axios.get('https://8mplwrsw2d.execute-api.us-west-2.amazonaws.com/prod/recipes/getallrecipes/' + customerId, requestHeaders)
+    .then((response) => {
+    console.log(response);
+    populateMyRecipesList(response.data);
   })
-}
+}                           
 
-window.onload = async function(evt) {
-  evt.preventDefault();
-  console.log("Getting Playlist Data...");
-  axios.get("https://svebsuap66.execute-api.us-west-2.amazonaws.com/prod/playlists", {
-    authorization: {
-      'x-api-key': 'K7CHRL6aqt1C6eGJ9EHyFaZCn86G0fyI2sTZKSkW'
-    }
-  }).then((res) => {
-    console.log(res.data);
-    populatePlaylists(res.data.playlists);
-  })
-}
+function populateMyRecipesList(recipeData) {
+   
+  var recipes = recipeData.recipeList;
 
-function populatePlaylists(playlistData) {
+  recipes.forEach(recipeElement => {
 
-  for (let playlist of playlistData) {
+    let idElement = recipeElement[0]; //id
+    let nameElement = recipeElement[1]; //name
+
     let li = document.createElement("li");
-    let a = document.createElement("a");
-    let text = document.createTextNode(playlist.name);
+    let aRecipe = document.createElement("a");
+    let editButton = document.createElement("button");
+    let aEdit = document.createElement("a");
+    let deleteButton = document.createElement("button");
+      
+    let text = document.createTextNode(nameElement);
+    let editButtonText = document.createTextNode("Edit Recipe");
+    let deleteButtonText = document.createTextNode("Delete Recipe");
+    
+    aRecipe.setAttribute('href', `./GetRecipe.html?id=${idElement}`);
+  
+    editButton.setAttribute("id", "edit-" + idElement);
+    editButton.setAttribute("type", "button");
+    deleteButton.setAttribute("id", "delete-" + idElement);
+    deleteButton.setAttribute("type", "button");
+    
+    editButton.appendChild(editButtonText);
+    editButton.appendChild(aEdit);
+    deleteButton.appendChild(deleteButtonText);
 
-    a.setAttribute('href', `./playlist.html?id=${playlist.id}`);
+    aRecipe.appendChild(text);
+    li.appendChild(aRecipe);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
+    myRecipes.appendChild(li); 
+    
+    
+    document.querySelector("#edit-" + idElement).onclick = function() {
+      location.href= `./UpdateRecipe.html?id=${idElement}`;
+    }
 
-    a.appendChild(text);
-    li.appendChild(a);
-    playlistsList.appendChild(li);
+    document.querySelector("#delete-" + idElement).onclick = function() {
+      deleteRecipe(idElement);
+    }  
+    
+  });
+}  
+
+function deleteRecipe(id) {
+
+  let confirmed = confirm("Are you sure?")
+
+  if (confirmed) {
+
+    var requestHeaders = {
+      "Content-Type":"application/json",
+      "Accept":"*/*",
+      "Connection":"keep-alive",
+      "Access-Control-Allow-Origin":"*"
+    }
+  
+    axios.delete('https://8mplwrsw2d.execute-api.us-west-2.amazonaws.com/prod/recipes/'+ id)
+    .then((response) => {
+      console.log(response);
+      location.reload();
+    })
   }
 }
+  function editRecipe() {
+     location.href='updateRecipe.html';
+  }

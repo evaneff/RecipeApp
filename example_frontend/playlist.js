@@ -13,9 +13,9 @@ addAlbumTrackForm.onsubmit = function(evt) {
     "queueNext": false
   }
   axios.post(`https://svebsuap66.execute-api.us-west-2.amazonaws.com/prod/playlists/${id}/songs`, newSong, {
-    authorization: {
-      'x-api-key': 'K7CHRL6aqt1C6eGJ9EHyFaZCn86G0fyI2sTZKSkW'
-    }
+    // authorization: {
+    //   'x-api-key': 'K7CHRL6aqt1C6eGJ9EHyFaZCn86G0fyI2sTZKSkW'
+    // }
   })
   .then(res => {
     console.log(res);
@@ -27,9 +27,9 @@ window.onload = async function(evt) {
   evt.preventDefault();
   console.log("Getting Album Track Data...");
   axios.get("https://svebsuap66.execute-api.us-west-2.amazonaws.com/prod/playlists/"+id+"/songs", {
-    authorization: {
-      'x-api-key': 'K7CHRL6aqt1C6eGJ9EHyFaZCn86G0fyI2sTZKSkW'
-    }
+    // authorization: {
+    //   'x-api-key': 'K7CHRL6aqt1C6eGJ9EHyFaZCn86G0fyI2sTZKSkW'
+    // }
   }).then(res => {
     console.log(res);
     if (!res.data) {

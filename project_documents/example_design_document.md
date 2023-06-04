@@ -87,7 +87,7 @@ will store the list of songs in a given playlist directly in the playlists
 table.
 
 AmazonMusicPlaylistService will also provide a web interface for users to manage
-their playlists. A main page providing a list view of all of their playlists
+their playlists. A template_java_project.src.main page providing a list view of all of their playlists
 will let them create new playlists and link off to pages per-playlist to update
 metadata and add songs.
 

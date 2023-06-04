@@ -54,7 +54,7 @@ and retrieval of recipes and foods to satisfy our requirements.
 We will store recipes and foods in separate tables in DynamoDB to allow users access to their own custom 
 recipes and foods.
 
-Recipe Macro Finder will also provide a web interface for users to manage their recipes and foods. A main page providing 
+Recipe Macro Finder will also provide a web interface for users to manage their recipes and foods. A template_java_project.src.main page providing 
 a list view of all of their recipes will let them create new recipes and link off to pages per-recipe to update them.
 
 [Link to project class diagram](/Users/evamneff/BloomTech/Unit 5/Module 1/bd-team-project-evaneff/project_documents/RecipeProject.puml)
