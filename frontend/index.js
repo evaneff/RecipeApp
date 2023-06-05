@@ -1,4 +1,4 @@
-const customerId = "evamneff";
+const customerId = "testcustomer";
 const myRecipes = document.querySelector("#recipes");
 
 window.onload = async function getAllRecipes(evt) {

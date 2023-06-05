@@ -2,7 +2,7 @@ let counter = 1;
 const addIngredient = document.querySelector("#ingredient-div");
 const createRecipeForm = document.querySelector("#create-recipe-form");
 //const createRecipe = document.querySelector("#create");
-const customerId = "evamneff";
+const customerId = "testcustomer";
 
 function createNewIngredient() {
    counter++;

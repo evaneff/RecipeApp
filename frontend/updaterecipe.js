@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
-const customerId = "evamneff";
+const customerId = "testcustomer";
 let ingredientsLength = 0;
 
 window.onload = async function(evt) {
