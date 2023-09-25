@@ -2,19 +2,28 @@
 
 Welcome to your Learn and Be Curious Project Repository! As you already know, Learn and Be Curious is a unique experience from your other sprints here at Bloomtech. The most significant difference is that instead of being given a partially built project with mastery tasks that you need to complete, you will be creating a project from scratch, putting it onto AWS, and presenting your work.
 
-We strongly recommend you review this repository's contents before you do any serious planning. Inside, you will find project requirements, templates, and guides that will help you get off to a great start. The requirements for your project are high-level by design. Your project should be unique and something you would be proud to share with others. 
+
+## Problem Statement
+
+There are many websites that allow searching of databases to find the macronutrient content of foods.
+Recipe Macro Finder will allow users to create custom recipes and view the total calories and macronutrients of all
+the ingredients by serving size.
   
-## How to Use this Repository
+## Use Cases
 
-All project files that you use should be inside this repository. If you're working on a team, all team members should have access to the same repository so you can share your files in one place.
+U1. As a customer, I want to create custom recipes.
 
-As we mentioned above, we first recommend becoming familiar with the contents of this repository. If you have questions about the requirements of this project, feel free to reach out to the instructor to get any clarification.
+U2. As a customer, I want to view all of my saved recipes.
 
-We've included a template Java project and webpages. Feel free to use these examples as references as you build out your own project.
+U3. As a customer, I want to update the ingredients in existing recipes.
+    
+U4. As a customer, I want to update the number of servings in a recipe.
 
-## Deadlines
+U5. As a customer, I want to view the total calories and macronutrient per serving of a recipe.
 
-All project deadlines can be found in the [rubric](project_documents/rubric.md).
+U6. As a customer, I want to input custom foods into database.
+
+
   
 ## What Files are in This Repository?
 
