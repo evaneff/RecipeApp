@@ -27,7 +27,7 @@ U6. As a customer, I want to input custom foods into database.
   
 ## What Files are in This Repository?
 
-#### [Design Document](project_documents/design_document.md)
+#### [Design Document](project_documents/design_document_final.md)
 
 The design document is what you need to complete before you start coding. This document lays out what you will be building and how you will build it, and the more you put into it, the easier your implementation will be.
 
